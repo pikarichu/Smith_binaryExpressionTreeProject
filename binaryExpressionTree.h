@@ -164,7 +164,6 @@ public:
     //Copy constructor
 
     binaryExpressionTree(string);
-    //Default constructor
 
     ~binaryExpressionTree()
     {
