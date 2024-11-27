@@ -25,8 +25,6 @@ class binaryTreeType
 protected:
     nodeType<elemType>* root;
 
-
-
 public:
 
     const binaryTreeType<elemType>& operator=
@@ -95,22 +93,23 @@ public:
     //               deleteItem is not in the binary tree,
     //               an appropriate message is printed.
 
-    binaryTreeType(const binaryTreeType<elemType>& otherTree);
-    //Copy constructor
 
     binaryTreeType();
     //Default constructor
+    
+    binaryTreeType(elemType& otherTree);
+    //Copy constructor
+
+    //copy constructor
+
+
+
 
     ~binaryTreeType();
     //Destructor
 
-
-
-protected:
-
-
 private:
-    void copyTree(nodeType<elemType>*& copiedTreeRoot,
+    virtual void copyTree(nodeType<elemType>*& copiedTreeRoot,
         nodeType<elemType>* otherTreeRoot);
     //Makes a copy of the binary tree to which
     //otherTreeRoot points.
@@ -172,8 +171,17 @@ private:
 template <class elemType>
 binaryTreeType<elemType>::binaryTreeType()
 {
-    //nodeType<elemType> root = NULL;
     root = NULL;
+}
+
+//copy constructor
+template <class elemType>
+binaryTreeType<elemType>::binaryTreeType(elemType& otherTree)
+{
+    if (otherTree.root == NULL) //otherTree is empty
+        root = NULL;
+    else
+        copyTree(root, otherTree.root);
 }
 
 template <class elemType>
@@ -219,7 +227,7 @@ int binaryTreeType<elemType>::treeLeavesCount() const
 }
 
 template <class elemType>
-void  binaryTreeType<elemType>::copyTree
+ void  binaryTreeType<elemType>::copyTree
 (nodeType<elemType>*& copiedTreeRoot,
     nodeType<elemType>* otherTreeRoot)
 {
@@ -306,17 +314,6 @@ template <class elemType>
 void  binaryTreeType<elemType>::destroyTree()
 {
     destroy(root);
-}
-
-//copy constructor
-template <class elemType>
-binaryTreeType<elemType>::binaryTreeType
-(const binaryTreeType<elemType>& otherTree)
-{
-    if (otherTree.root == NULL) //otherTree is empty
-        root = NULL;
-    else
-        copyTree(root, otherTree.root);
 }
 
 //Destructor

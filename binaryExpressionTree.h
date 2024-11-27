@@ -6,33 +6,36 @@
 #include <stack>
 #include <vector>
 #include <cstring>
-//#include <cctype>
-
 
 using namespace std;
-
-
 
 class binaryExpressionTree : public binaryTreeType<string>
 {
 public:
 
+    virtual void binaryTreeType() {};
+
+    virtual void binaryTreeType(string exp)
+    {
+        binaryTreeType(exp);
+    }
+
 	void buildExpressionTree(string postFixExpression)
 	{
-        cout << "Size of postFixExpression: " << sizeof(postFixExpression) << endl;
-        cout << "postFixExpression Length : " << postFixExpression.length() << endl;
+
+        //cout << "Size of postFixExpression: " << sizeof(postFixExpression) << endl;
+        //cout << "postFixExpression Length : " << postFixExpression.length() << endl;
 
         stack<nodeType<string>*> eStack;
 
         char* expression = new char[postFixExpression.length() + 1];
 
-        cout << "Size of expression: " << sizeof(expression) << endl;
+        //cout << "Size of expression: " << sizeof(expression) << endl;
         strcpy(expression, postFixExpression.c_str());
         string currentToken;
         cout << expression << endl;
         char c;
-        //for (char c : expression) {
-        cout << "sizeof(expression): " << sizeof(expression) << endl;
+        //cout << "sizeof(expression): " << sizeof(expression) << endl;
         for (int i = 0; i < postFixExpression.length(); i++) {
             c = expression[i];
             if (isspace(c)) {
@@ -41,15 +44,15 @@ public:
 
                     newNode = new nodeType<string>;
 
-                    cout << currentToken << endl;
+                    //cout << currentToken << endl;
                     newNode->info = string(currentToken);
                     newNode->lLink = nullptr;
                     newNode->rLink = nullptr;
-                    cout << "Number newNode->info " << newNode->info << endl;
+                    //cout << "Number newNode->info " << newNode->info << endl;
 
                     eStack.push(newNode);
                     currentToken.clear();
-                    cout << endl << endl;
+                    //cout << endl << endl;
 
                 }
             }
@@ -62,34 +65,25 @@ public:
                 newNode->info = c;
                 newNode->lLink = nullptr;
                 newNode->rLink = nullptr;
-                cout << c << endl;
+                //cout << c << endl;
                 if (!eStack.empty()) {
-                    //nodeType<string> temp;
 
-                    //cout << "eStack.top().info " << eStack.top()->info << endl;
                     if (!eStack.empty()) {
 
                         newNode->rLink = eStack.top();
-                        //cout << "eStack.top().info " << eStack.top()->info << endl;
                         eStack.pop();
 
                         if (!eStack.empty()) {
-
-                            //eStack.pop();
                             newNode->lLink = eStack.top();
                             eStack.pop();
-
                             eStack.push(newNode);
-
                             currentToken.clear();
                             //root->insert(temp.info);
-                            cout << "operator newNode->info " << newNode->info << endl;
 
-                            cout << "operator newNode->rLink " << newNode->rLink->info << endl;
-                            cout << "operator newNode->lLink " << newNode->lLink->info << endl;
-                            cout << endl << endl;
-
-
+                            //cout << "operator newNode->info " << newNode->info << endl;
+                            //cout << "operator newNode->rLink " << newNode->rLink->info << endl;
+                            //cout << "operator newNode->lLink " << newNode->lLink->info << endl;
+                            //cout << endl << endl;
                         }
                         else
                             cerr << "Error: Stack is empty" << endl;
@@ -109,56 +103,58 @@ public:
                 cout << "Invalid character: " << c << endl;
             }
         }
-        //cout << eStack.top().lLink->info << endl;
-        //nodeType<string>* tempNode = &eStack.top();
-        //cout << "Left Value:" << tempNode->lLink->info << endl;
-        //cout << "Right Value:" << tempNode->rLink->info << endl;
+
         if (!eStack.empty()) {
-            cout << eStack.top()->info << endl;
-            cout << eStack.top()->lLink->info << endl;
-            cout << eStack.top()->rLink->info << endl;
+            //cout << eStack.top()->info << endl;
+            //cout << eStack.top()->lLink->info << endl;
+            //cout << eStack.top()->rLink->info << endl;
 
             root = eStack.top();
-            //tree = eStack.top();
-            //tree->insert(*eStack.top());
-            //this->copyTree(root, eStack.top());
-            cout << "It worked!!" << endl;
+
+            //cout << "It worked!!" << endl;
             eStack.pop();
             if (!eStack.empty()) {
                 cerr << "There was an error" << endl;
-                root = NULL;
+                root = nullptr;
             }
 
         }
 
 	}
 
+    double evaluate(nodeType<string>*);
+
 	double evaluateExpressionTree()
 	{
-		//evaluateExpressionTree(root);
+        double result = evaluate(root);
+        //cout << "result = " << result << endl;
+		return evaluate(root);
 	}
 
-	bool search(const string&)
+    bool search(const string& searchItem) const override
+    {
+        return true;
+    }
+
+	void insert(const string&) override
 	{
 
 	}
 
-	void insert(const string&)
+	void deleteNode(const string&) override
 	{
 
 	}
 
-	void deleteNode(const string&)
-	{
+    binaryExpressionTree()
+    {
 
-	}
+    }
 
     binaryExpressionTree(string&)
     {
 
     }
-
-  
 
     binaryExpressionTree(const binaryExpressionTree& otherTree);
     //Copy constructor
@@ -172,18 +168,12 @@ public:
     //Destructor
 
 private:
-	
-    string thisExpression;
-    //binaryTreeType<string> *tree;
-    //tree = new binaryTreeType<string>;
-    //binaryTreeType<string>* temp;
+    double evaluateExpressionTree(nodeType<string>* root)
+    {
 
-	double evaluateExpressionTree(nodeType<string>* postFixExpression)
-	{
-        //nodeType<string>* p;
+        return(evaluate(root));
 
-	}
-
+    }
 };
 
 binaryExpressionTree::binaryExpressionTree(const binaryExpressionTree& otherTree)
@@ -194,12 +184,51 @@ binaryExpressionTree::binaryExpressionTree(const binaryExpressionTree& otherTree
 binaryExpressionTree::binaryExpressionTree(string expression)
 {
     buildExpressionTree(expression);
-    //tree = new binaryTreeType<string>();
-    //thisExpression = expression;
-    //nodeType<string> root = expression;
-    //stack<string> thisStack;
 }
 
+double binaryExpressionTree::evaluate(nodeType<string>* p)
+{
+    double x, y;
+    string op;
+
+    if (p->lLink == NULL &&  p->rLink == NULL)
+    {
+        return stod(p->info);
+    }
+    else
+    {
+        op = p->info;
+        x = evaluate(p->lLink);
+        y = evaluate(p->rLink);
+        if (op == "+")
+        {
+            //cout << "+" << endl;
+            return (x + y);
+        }
+        else if (op == "-")
+        {
+            //cout << "-" << endl;
+            return (x - y);
+        }
+        else if (op == "*")
+        {
+            //cout << "*" << endl;
+            return (x * y);
+        }
+        else if (op == "/")
+        {
+            //cout << "/" << endl;
+            return (x / y);
+        }
+        else
+        {
+            cout << "Error";
+            return 0;
+        }
+
+    }
+
+}
 
 
 #endif
